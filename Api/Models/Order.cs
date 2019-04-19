@@ -2,7 +2,7 @@ namespace Api.Models
 {
     public class Order
     {
-        string Key{get;set;}
-        string Value{get;set;}
+        public string Key{get;set;}
+        public string Value{get;set;}
     }
 }
