@@ -51,7 +51,7 @@ namespace Api
                 app.UseHsts();
             }
             app.UseCors();
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseMvc();
             app.UseSignalR(routes =>
             {
