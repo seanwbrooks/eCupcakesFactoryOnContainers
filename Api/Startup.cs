@@ -39,12 +39,12 @@ namespace Api
                 });
             
             var producerConfig = new ProducerConfig();
-           // var consumerConfig = new ConsumerConfig();
+            var consumerConfig = new ConsumerConfig();
             Configuration.Bind("producer",producerConfig);
-           // Configuration.Bind("consumer",consumerConfig);
+            Configuration.Bind("consumer",consumerConfig);
 
             services.AddSingleton<ProducerConfig>(producerConfig);
-           // services.AddSingleton<ConsumerConfig>(consumerConfig);
+            services.AddSingleton<ConsumerConfig>(consumerConfig);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.SignalR;
 namespace SignalRDemo.Hubs{
     public class OrderMonitorHub: Hub<IOrderRequest>
     {
-    public async  Task SendOrderRecievedNotificationToClients(Order orderRequest)
+    public async  Task SendOrderRecievedNotificationToClients(OrderRequest orderRequest)
         {
             await Clients.All.InformNewOrder(orderRequest);
         }

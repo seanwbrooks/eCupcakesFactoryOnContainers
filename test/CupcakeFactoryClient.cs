@@ -16,7 +16,7 @@ namespace CupcakeFactory.Clients
                             .WithUrl("http://localhost:5000/ordermonitorhub")
                             .Build();
 
-            _connection.On<Order>("InformNewOrder", 
+            _connection.On<OrderRequest>("InformNewOrder", 
                         o => _ = RecieveOrderNotification(o));           
         }
 
@@ -50,11 +50,12 @@ namespace CupcakeFactory.Clients
             return _connection.DisposeAsync();
         }
 
-        public  Task RecieveOrderNotification(Order o){
+        public  Task RecieveOrderNotification(OrderRequest o){
             Console.WriteLine("================================");
             Console.WriteLine("Recieved a request order !!!!!!");
-            Console.WriteLine($"Key:{o.Key}");
-            Console.WriteLine($"Value:{o.Value}");
+            Console.WriteLine($"Flavour:{o.Flavour}");
+            Console.WriteLine($"Size:{o.Size}");
+            Console.WriteLine($"Quantity:{o.Quantity}");
             Console.WriteLine("================================");
             return Task.CompletedTask;
         }
