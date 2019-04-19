@@ -1,6 +1,8 @@
+using System.Threading.Tasks;
+
 namespace Api.Models{
     public interface IOrder
     {
-        void InformApps(Order o);
+        Task InformApps(Order o);
     }
 }

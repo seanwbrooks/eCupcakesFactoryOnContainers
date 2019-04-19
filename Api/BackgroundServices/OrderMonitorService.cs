@@ -11,7 +11,7 @@ namespace Api.BackgroundServices{
     {
         private IHubContext<OrderMonitorHub, IOrder> _orderMonitorHub;
 
-        protected OrderMonitorService(IHubContext<OrderMonitorHub, IOrder> orderMonitorHub) => this._orderMonitorHub = orderMonitorHub;
+        public OrderMonitorService(IHubContext<OrderMonitorHub, IOrder> orderMonitorHub) => this._orderMonitorHub = orderMonitorHub;
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
@@ -22,7 +22,7 @@ namespace Api.BackgroundServices{
 
                 //Step 1: If there is a new message in KAFKA "Orders" topic, inform the client.
                 Order orderRequest = new Order(){ Key = "Test",Value="Test"};
-                _orderMonitorHub.Clients.All.InformApps(orderRequest);
+                await _orderMonitorHub.Clients.All.InformApps(orderRequest);
                 
                 //Wait for 
                 await Task.Delay(1000);
