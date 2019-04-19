@@ -9,9 +9,9 @@ using SignalRDemo.Hubs;
 namespace Api.BackgroundServices{
     public class OrderMonitorService : BackgroundService
     {
-        private IHubContext<OrderMonitorHub, IOrder> _orderMonitorHub;
+        private IHubContext<OrderMonitorHub, IOrderRequest> _orderMonitorHub;
 
-        public OrderMonitorService(IHubContext<OrderMonitorHub, IOrder> orderMonitorHub) => this._orderMonitorHub = orderMonitorHub;
+        public OrderMonitorService(IHubContext<OrderMonitorHub, IOrderRequest> orderMonitorHub) => this._orderMonitorHub = orderMonitorHub;
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
@@ -22,7 +22,7 @@ namespace Api.BackgroundServices{
 
                 //Step 1: If there is a new message in KAFKA "Orders" topic, inform the client.
                 Order orderRequest = new Order(){ Key = "Test",Value="Test"};
-                await _orderMonitorHub.Clients.All.InformApps(orderRequest);
+                await _orderMonitorHub.Clients.All.InformNewOrder(orderRequest);
                 
                 //Wait for 
                 await Task.Delay(5000);
