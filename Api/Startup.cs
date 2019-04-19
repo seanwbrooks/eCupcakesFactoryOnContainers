@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using SignalRDemo.Hubs;
 
 namespace Api
 {
@@ -26,6 +27,8 @@ namespace Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -42,6 +45,10 @@ namespace Api
 
             app.UseHttpsRedirection();
             app.UseMvc();
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<OrderMonitorHub>("/ordermonitorhub");
+            });
         }
     }
 }
