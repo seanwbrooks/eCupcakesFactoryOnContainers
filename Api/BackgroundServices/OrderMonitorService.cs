@@ -25,7 +25,7 @@ namespace Api.BackgroundServices{
                 await _orderMonitorHub.Clients.All.InformApps(orderRequest);
                 
                 //Wait for 
-                await Task.Delay(1000);
+                await Task.Delay(5000);
             }
         }
     }

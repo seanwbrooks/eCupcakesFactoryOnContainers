@@ -32,6 +32,11 @@ namespace Api
             services.AddSignalR();
 
             services.AddHostedService<OrderMonitorService>();
+
+            services.AddCors(c =>
+                {
+                    c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin());
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,7 +50,7 @@ namespace Api
             {
                 app.UseHsts();
             }
-
+            app.UseCors();
             app.UseHttpsRedirection();
             app.UseMvc();
             app.UseSignalR(routes =>
