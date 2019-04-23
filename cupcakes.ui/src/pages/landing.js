@@ -1,10 +1,25 @@
 
 import React from 'react';
+import { connect } from "react-redux";
+import DisplayOrders from "../components/order";
+import { submitUserOrderRequest } from "../actions";
 
-const Landing = () => (
-    <div>
-        <h1> Landing Page </h1>
-    </div>
-);
+ export const Landing = (props) => {
+    return (
+        <div>
+            <h1> Landing Page-{props.recievedorder} </h1>
+            <DisplayOrders list={props.submittedorders} />
+        </div>
+    );
+};
 
-export default Landing;
+const mapStateToProps = state => ({submittedorders:state.order.submittedorders,recievedorder:state.order.recievedorder});
+
+const mapDispatchToProps = dispatch => ({
+    submitOrder: payload => dispatch(submitUserOrderRequest(payload))
+});
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Landing);
