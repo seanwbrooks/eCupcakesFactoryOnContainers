@@ -1,19 +1,34 @@
 
 import React from 'react';
 import { connect } from "react-redux";
-import DisplayOrders from "../components/listorders";
+import DisplayOrders from "../pages/listorders";
 import { submitUserOrderRequest } from "../actions";
-import OrderDashboard from "../components/orderdashboard";
+import OrdersToMixer from "../components/mixerprocess";
+import OrdersToBake from "../components/bakeprocess";
 import OrderRequest from "../components/orderrequest";
+import Grid from '@material-ui/core/Grid';
 
  export const Landing = (props) => {
     return (
+        // <div>
+        //     <h1> Orders </h1>
+        //     {/* <DisplayOrders list={props.submittedorders} /> */}
+        //     {/* <OrderDashboard /> */}
+        //     {/* <OrderRequest submitOrder={props.submitOrder} /> */}
+        //     <OrderDashboard submitOrder={props.submitOrder}  />
+        // </div>
         <div>
-            <h1> Orders </h1>
-            {/* <DisplayOrders list={props.submittedorders} /> */}
-            {/* <OrderDashboard /> */}
-            {/* <OrderRequest submitOrder={props.submitOrder} /> */}
-            <OrderDashboard submitOrder={props.submitOrder}  />
+            <Grid container spacing={24} style={{padding: 24}}>
+                <Grid item xs={12} sm={6} lg={4} xl={3}>
+                    <OrderRequest submitOrder={props.submitOrder} />
+                </Grid>
+                <Grid item xs={12} sm={6} lg={4} xl={3}>
+                    <OrdersToMixer />
+                </Grid>
+                <Grid item xs={12} sm={6} lg={4} xl={3}>
+                    <OrdersToBake />
+                </Grid>
+            </Grid>
         </div>
     );
 };

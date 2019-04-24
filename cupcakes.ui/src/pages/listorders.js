@@ -7,7 +7,7 @@ const DisplayOrders = (props) =>(
     <ul>
     {props.list.map((orderrequest, index) => (
       <div>
-          <label>{orderrequest.Id}</label>
+          <label>{orderrequest.id}</label>
       </div>
     ))}
   </ul>

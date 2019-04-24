@@ -23,7 +23,7 @@ const styles = (theme) =>({
         minWidth: 120,
       },
     card: {
-        width: 500,
+        width: 350,
         margin: 'auto',
         textAlign: 'center'
     },

@@ -23,9 +23,8 @@ const styles = (theme) =>({
         minWidth: 120,
       },
     card: {
-        width: 450,
+        width: 400,
         height:310,
-        margin: '3px',
         textAlign: 'center'
     },
     media: {
@@ -33,7 +32,7 @@ const styles = (theme) =>({
     },
 });
 
-class OrdersToMixer extends Component {
+class OrdersToBake extends Component {
     constructor(props) {
         super(props);
 
@@ -55,7 +54,7 @@ class OrdersToMixer extends Component {
             }).catch(err => console.log('Error while establishing connection :('));
         });
 
-        hubConnection.on('InformNewOrderToMix', (receivedMessage) => {
+        hubConnection.on('InformNewOrderToBake', (receivedMessage) => {
             console.log(receivedMessage);
             var newArray = this.state.messages.slice();
             newArray.push(receivedMessage);
@@ -72,12 +71,12 @@ class OrdersToMixer extends Component {
         return (
         
         <Card className={classes.card}>
-            <CardHeader title="Mix Process " component="span" style={{backgroundColor:'lightblue',color:'white'}}>
+            <CardHeader title="Bake Process " component="span" style={{backgroundColor:'lightblue',color:'white'}}>
             </CardHeader>
             <CardMedia
                 className={classes.media}
-                image="/mixerprocess.png"
-                title="Mixer"
+                image="/bakeprocess.png"
+                title="Bake"
             />
             <CardContent>
                 { !this.state.messages ? "No New Orders" : (<div>New orders: {this.state.messages.length}
@@ -96,4 +95,4 @@ class OrdersToMixer extends Component {
     }
 }
 
-export default withStyles(styles)(OrdersToMixer);
+export default withStyles(styles)(OrdersToBake);

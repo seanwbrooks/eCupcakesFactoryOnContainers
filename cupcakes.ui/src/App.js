@@ -4,12 +4,14 @@ import {BrowserRouter as Router} from 'react-router-dom';
 import Routes from './routes';
 import './App.css';
 import store from './store'
-
+import Header from './components/header';
+import CookingProcess from './components/cookingprocess';
 const App = () => (
     <Provider store={store}>
       <div className="App">
         <div>
-          <h1>Cup cakes Factory</h1>
+          <Header />
+          <CookingProcess />
           <Router>
             <Routes />
           </Router> 
