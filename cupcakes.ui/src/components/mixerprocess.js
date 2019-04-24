@@ -1,6 +1,33 @@
 
 import React, { Component } from 'react';
 import * as SignalR from "@aspnet/signalr";
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import CardHeader from '@material-ui/core/CardHeader';
+import { withStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import InputLabel from '@material-ui/core/InputLabel';
+import Order from './order';
+
+const styles = (theme) =>({
+    root: {
+        display: 'flex',
+        flexWrap: 'wrap',
+      },
+      formControl: {
+        margin: theme.spacing.unit,
+        minWidth: 120,
+      },
+    card: {
+        width: 500,
+        margin: 'auto',
+        textAlign: 'center'
+    },
+    media: {
+        height: 140,
+    },
+});
 
 class OrdersToMixer extends Component {
     constructor(props) {
@@ -25,17 +52,34 @@ class OrdersToMixer extends Component {
         });
 
         hubConnection.on('InformNewOrder', (receivedMessage) => {
+            console.log(receivedMessage);
             var newArray = this.state.messages.slice();
             newArray.push(receivedMessage);
             this.setState({ messages: newArray });
+            console.log(this.state.messages[0]);
         });
-
         
     }
-
+    
     render() {
-        return (<div>New orders: {this.state.messages.length}</div>);
+        const { classes } = this.props;
+        return (
+        
+        <Card className={classes.card}>
+            <CardHeader title="Mixer Process Here ">
+            </CardHeader>
+            <CardContent>
+                    {this.state.messages.map((orderrequest, index) => (
+                        <Order request={orderrequest}/> 
+                    ))}
+            </CardContent>
+            <CardActions>
+                <div>New orders: {this.state.messages.length}
+                </div>
+            </CardActions>
+        </Card>
+        );
     }
 }
 
-export default OrdersToMixer;
+export default withStyles(styles)(OrdersToMixer);
