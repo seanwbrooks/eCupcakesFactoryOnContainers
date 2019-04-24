@@ -3,7 +3,7 @@ import { Submit_User_Order } from "../actions/types";
 
 const initialState={
     submittedorders:[{"Id":123},{"Id":345},{"Id":789}],
-    recievedorder:123
+    recievedorders:[]
 };
 const orderReducer = (state = initialState, action) => {
   switch (action.type) {
