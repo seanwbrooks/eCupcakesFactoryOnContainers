@@ -13,8 +13,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using SignalRDemo.Hubs;
 using Confluent.Kafka;
-using Microsoft.AspNetCore.Cors.Infrastructure;
-
 namespace Api
 {
     public class Startup
@@ -37,13 +35,13 @@ namespace Api
 
             services.AddCors(c =>
                 {
-                    c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin());
+                    c.AddPolicy("AllowOrigin", options => options.WithOrigins("http://localhost:3000").AllowAnyMethod().AllowAnyHeader().AllowCredentials());
                 });
-
+            
             var producerConfig = new ProducerConfig();
             var consumerConfig = new ConsumerConfig();
-            Configuration.Bind("producer", producerConfig);
-            Configuration.Bind("consumer", consumerConfig);
+            Configuration.Bind("producer",producerConfig);
+            Configuration.Bind("consumer",consumerConfig);
 
             services.AddSingleton<ProducerConfig>(producerConfig);
             services.AddSingleton<ConsumerConfig>(consumerConfig);
@@ -60,8 +58,7 @@ namespace Api
             {
                 app.UseHsts();
             }
-            app.UseCors(builder =>builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
-
+            app.UseCors("AllowOrigin");
             //app.UseHttpsRedirection();
             app.UseMvc();
             app.UseSignalR(routes =>
