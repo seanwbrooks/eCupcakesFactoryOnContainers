@@ -34,7 +34,7 @@ const styles = (theme) =>({
 
 const handleSubmitClick = ({ submitOrder }) => {
     //TODO
-    const samplePayload = { Id: 132, Flavour: "Cookies-SRINI", Quantity: 11 };
+    const samplePayload = { Id: 177, Flavour: "Cookies-SRINI", Quantity: 11 };
     submitOrder(samplePayload);
 }
 const handleChange = event => {
