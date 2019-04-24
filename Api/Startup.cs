@@ -31,7 +31,8 @@ namespace Api
 
             services.AddSignalR();
 
-            services.AddHostedService<OrderMonitorService>();
+            services.AddHostedService<MixProcessService>();
+            services.AddHostedService<BakeProcessService>();
 
             services.AddCors(c =>
                 {

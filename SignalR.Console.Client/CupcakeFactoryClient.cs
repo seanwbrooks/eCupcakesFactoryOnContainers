@@ -16,7 +16,7 @@ namespace CupcakeFactory.Clients
                             .WithUrl("http://localhost:5000/ordermonitorhub")
                             .Build();
 
-            _connection.On<OrderRequest>("InformNewOrder", 
+            _connection.On<OrderRequest>("InformNewOrderToMix", 
                         o => _ = RecieveOrderNotification(o));           
         }
 

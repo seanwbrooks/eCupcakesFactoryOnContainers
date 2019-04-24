@@ -7,15 +7,16 @@ using Microsoft.Extensions.Hosting;
 using SignalRDemo.Hubs;
 using Newtonsoft.Json;
 using Confluent.Kafka;
+using Api.KafkaUtil;
 
 namespace Api.BackgroundServices
 {
-    public class OrderMonitorService : BackgroundService
+    public class BakeProcessService : BackgroundService
     {
-        public OrderMonitorService()
+        public BakeProcessService()
         {
         }
-        public OrderMonitorService(IHubContext<OrderMonitorHub, IOrderRequest> orderMonitorHub,ProducerConfig producerConfig, ConsumerConfig consumerConfig)
+        public BakeProcessService(IHubContext<OrderMonitorHub, IOrderRequest> orderMonitorHub,ProducerConfig producerConfig, ConsumerConfig consumerConfig)
         {
             this._orderMonitorHub = orderMonitorHub;
             this._producerConfig = producerConfig;
@@ -34,17 +35,19 @@ namespace Api.BackgroundServices
             while (!stoppingToken.IsCancellationRequested)
             {
 
-                var consumerHelper = new ConsumerWrapper(_consumerConfig, "orderrequests");
+                var consumerHelper = new ConsumerWrapper(_consumerConfig, "readytobake");
                 string message = consumerHelper.readMessage();
 
                 //Deserilaize 
-                OrderRequest orderRequest = JsonConvert.DeserializeObject<OrderRequest>(message);
+                MixedOrder readyToBakeRequest = JsonConvert.DeserializeObject<MixedOrder>(message);
 
                 //TODO:: Process Order
-                Console.WriteLine($"Info: processing the order for {orderRequest.Id}");
+                Console.WriteLine($"Info: processing the order for {readyToBakeRequest.Id}");
 
                 //Step 1: If there is a new message in KAFKA "Orders" topic, inform the client.
-                 await _orderMonitorHub.Clients.All.InformNewOrder(orderRequest);
+                 await _orderMonitorHub.Clients.All.InformNewOrderToBake(readyToBakeRequest);
+
+                //Step 2: Write to "readytodecorate" queue
 
                 //Wait for 
                 await Task.Delay(5000);

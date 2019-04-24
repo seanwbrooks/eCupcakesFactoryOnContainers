@@ -6,7 +6,7 @@ namespace SignalRDemo.Hubs{
     {
     public async  Task SendOrderRecievedNotificationToClients(OrderRequest orderRequest)
         {
-            await Clients.All.InformNewOrder(orderRequest);
+            await Clients.All.InformNewOrderToMix(orderRequest);
         }
     }
 }

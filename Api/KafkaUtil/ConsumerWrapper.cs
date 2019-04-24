@@ -1,4 +1,4 @@
-namespace Api
+namespace Api.KafkaUtil
 {
     using Confluent.Kafka;
     using System;
