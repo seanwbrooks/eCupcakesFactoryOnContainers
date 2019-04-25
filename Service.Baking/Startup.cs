@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Api.BackgroundServices;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -27,6 +28,10 @@ namespace Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.AddSignalR();
+
+            services.AddHostedService<BakeProcessService>();
 
             services.AddCors(c =>
                 {
@@ -56,6 +61,10 @@ namespace Api
             app.UseCors("AllowOrigin");
             //app.UseHttpsRedirection();
             app.UseMvc();
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<OrderMonitorHub>("/ordermonitorhub");
+            });
         }
     }
 }
