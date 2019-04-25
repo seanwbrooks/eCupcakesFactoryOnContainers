@@ -5,6 +5,8 @@ import DisplayOrders from "../pages/listorders";
 import { submitUserOrderRequest } from "../actions";
 import OrdersToMixer from "../components/mixerprocess";
 import OrdersToBake from "../components/bakeprocess";
+import OrdersToDecorate from "../components/decorateprocess";
+import OrdersToBox from "../components/packageprocess";
 import OrderRequest from "../components/orderrequest";
 import Grid from '@material-ui/core/Grid';
 
@@ -27,6 +29,12 @@ import Grid from '@material-ui/core/Grid';
                 </Grid>
                 <Grid item xs={12} sm={6} lg={4} xl={3}>
                     <OrdersToBake />
+                </Grid>
+                <Grid item xs={12} sm={6} lg={4} xl={3}>
+                    <OrdersToDecorate />
+                </Grid>
+                <Grid item xs={12} sm={6} lg={4} xl={3}>
+                    <OrdersToBox />
                 </Grid>
             </Grid>
         </div>
