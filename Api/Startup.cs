@@ -33,6 +33,8 @@ namespace Api
 
             services.AddHostedService<MixProcessService>();
             services.AddHostedService<BakeProcessService>();
+            services.AddHostedService<DecorateProcessService>();
+            services.AddHostedService<BoxProcessService>();
 
             services.AddCors(c =>
                 {

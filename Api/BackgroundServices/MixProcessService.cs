@@ -30,7 +30,7 @@ namespace Api.BackgroundServices
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            Console.WriteLine($"OrderMonitoring service is running at: {DateTime.Now}");
+            Console.WriteLine($"Mix service is running at: {DateTime.Now}");
 
             while (!stoppingToken.IsCancellationRequested)
             {
@@ -42,7 +42,7 @@ namespace Api.BackgroundServices
                 OrderRequest orderRequest = JsonConvert.DeserializeObject<OrderRequest>(message);
 
                 //TODO:: Process Order
-                Console.WriteLine($"Info: processing the order for {orderRequest.Id}");
+                Console.WriteLine($"Info: Mixing for - order {orderRequest.Id}");
 
                 //Step 1: If there is a new message in KAFKA "Orders" topic, inform the client.
                  await _orderMonitorHub.Clients.All.InformNewOrderToMix(orderRequest);

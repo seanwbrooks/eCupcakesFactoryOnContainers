@@ -16,5 +16,15 @@ namespace Api.Models{
         public string BakedOn{get;set;}
     }
 
+    public class DecoratedOrder: BakedOrder{
+        public string DecoratedBy {get;set;}
+        public string DecoratedOn{get;set;}
+    }
+
+    public class BoxedOrder: DecoratedOrder{
+        public string PackagedBy {get;set;}
+        public string PackagedOn{get;set;}
+    }
+
     public enum ItemSize{S,M,L,XL}
 }
