@@ -47,23 +47,23 @@ namespace Api.BackgroundServices
                 //Step 1: If there is a new message to readytobox topic, inform the client.
                  await _orderMonitorHub.Clients.All.InformNewOrderToPackage(readyToBoxRequest);
 
-                //TODO: Assume you are packaging the decorated cupcakes here
-                await Task.Delay(5000);
+                // //TODO: Assume you are packaging the decorated cupcakes here
+                // await Task.Delay(5000);
 
-                //Step 2: Write to readytobake topic
-                BoxedOrder boxedOrder = new BoxedOrder(){
-                                        Id=readyToBoxRequest.Id,
-                                        Flavour=readyToBoxRequest.Flavour,
-                                        Quantity=readyToBoxRequest.Quantity,
-                                        Size=readyToBoxRequest.Size,
-                                        PackagedBy="Srinivasa",
-                                        PackagedOn="24th April,2019"};
+                // //Step 2: Write to readytobake topic
+                // BoxedOrder boxedOrder = new BoxedOrder(){
+                //                         Id=readyToBoxRequest.Id,
+                //                         Flavour=readyToBoxRequest.Flavour,
+                //                         Quantity=readyToBoxRequest.Quantity,
+                //                         Size=readyToBoxRequest.Size,
+                //                         PackagedBy="Srinivasa",
+                //                         PackagedOn="24th April,2019"};
 
-                string serializedOrder = JsonConvert.SerializeObject(boxedOrder);
-                var producerHelper = new ProducerWrapper(_producerConfig,"readytoship");
-                await producerHelper.writeMessage(serializedOrder);
-                Console.WriteLine($"Info: Packaging process finished the order, request moved to readytoship");
-                Console.Write($"------Completed Order -----------");
+                // string serializedOrder = JsonConvert.SerializeObject(boxedOrder);
+                // var producerHelper = new ProducerWrapper(_producerConfig,"readytoship");
+                // await producerHelper.writeMessage(serializedOrder);
+                // Console.WriteLine($"Info: Packaging process finished the order, request moved to readytoship");
+                // Console.Write($"------Completed Order -----------");
             }
         }
     }

@@ -13,11 +13,11 @@ namespace Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class OrderController : ControllerBase
+    public class DecorateController : ControllerBase
     {
 
         private readonly ProducerConfig config;
-        public OrderController(ProducerConfig config)
+        public DecorateController(ProducerConfig config)
         {
             this.config = config;
 
@@ -25,22 +25,23 @@ namespace Api.Controllers
 
         // POST api/values
         [HttpPost]
-        public async void Post([FromBody] OrderRequest orderRequest)
+        public async void Post([FromBody] DecoratedOrder decoratedOrder)
         {
             if(!ModelState.IsValid){
                 BadRequest();
             }
 
-            Console.WriteLine("===================================");
-            Console.WriteLine("POST=> Recieved a new order request");
+            Console.WriteLine("===============Decorator====================");
+            Console.WriteLine($"POST => order#{decoratedOrder.Id} decoration is completed, moving this to readytobox queue");
             Console.WriteLine("----");
-            Console.WriteLine($"Id:{orderRequest.Id},Flavour: {orderRequest.Flavour},Quantity:{orderRequest.Quantity}, Size:{orderRequest.Size}");
+            Console.WriteLine($"Id:{decoratedOrder.Id},Flavour: {decoratedOrder.Flavour},Quantity:{decoratedOrder.Quantity}");
+            Console.WriteLine($"PackagedBy:{decoratedOrder.DecoratedBy}, PackagedOn:{decoratedOrder.DecoratedOn}");
             Console.WriteLine("===================================");
             
 
             //Serialize 
-            string serializedOrder = JsonConvert.SerializeObject(orderRequest);
-            var producer = new ProducerWrapper(this.config,"orderrequests");
+            string serializedOrder = JsonConvert.SerializeObject(decoratedOrder);
+            var producer = new ProducerWrapper(this.config,"readytobox");
             await producer.writeMessage(serializedOrder);
 
              Created("TransactionId", "Your order is in progress");

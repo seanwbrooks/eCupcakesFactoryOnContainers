@@ -13,11 +13,11 @@ namespace Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class OrderController : ControllerBase
+    public class MixController : ControllerBase
     {
 
         private readonly ProducerConfig config;
-        public OrderController(ProducerConfig config)
+        public MixController(ProducerConfig config)
         {
             this.config = config;
 
@@ -25,22 +25,23 @@ namespace Api.Controllers
 
         // POST api/values
         [HttpPost]
-        public async void Post([FromBody] OrderRequest orderRequest)
+        public async void Post([FromBody] MixedOrder mixedOrder)
         {
             if(!ModelState.IsValid){
                 BadRequest();
             }
 
-            Console.WriteLine("===================================");
-            Console.WriteLine("POST=> Recieved a new order request");
+            Console.WriteLine("===============MIX====================");
+            Console.WriteLine($"POST => order#{mixedOrder.Id} is mixed, moving this to bake queue");
             Console.WriteLine("----");
-            Console.WriteLine($"Id:{orderRequest.Id},Flavour: {orderRequest.Flavour},Quantity:{orderRequest.Quantity}, Size:{orderRequest.Size}");
+            Console.WriteLine($"Id:{mixedOrder.Id},Flavour: {mixedOrder.Flavour},Quantity:{mixedOrder.Quantity}");
+            Console.WriteLine($"MixedBy:{mixedOrder.MixedBy}, MixedOn:{mixedOrder.MixedOn}");
             Console.WriteLine("===================================");
             
 
             //Serialize 
-            string serializedOrder = JsonConvert.SerializeObject(orderRequest);
-            var producer = new ProducerWrapper(this.config,"orderrequests");
+            string serializedOrder = JsonConvert.SerializeObject(mixedOrder);
+            var producer = new ProducerWrapper(this.config,"readytobake");
             await producer.writeMessage(serializedOrder);
 
              Created("TransactionId", "Your order is in progress");

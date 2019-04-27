@@ -47,22 +47,22 @@ namespace Api.BackgroundServices
                 //Step 1: If there is a new message to readytodecorate topic, inform the client.
                  await _orderMonitorHub.Clients.All.InformNewOrderToDecorate(readyToDecorateRequest);
 
-                //TODO: Assume you are decorating on baked cupcakes here
-                await Task.Delay(5000);
+                // //TODO: Assume you are decorating on baked cupcakes here
+                // await Task.Delay(5000);
 
-                //Step 2: Write to readytobake topic
-                DecoratedOrder bakedOrder = new DecoratedOrder(){
-                                        Id=readyToDecorateRequest.Id,
-                                        Flavour=readyToDecorateRequest.Flavour,
-                                        Quantity=readyToDecorateRequest.Quantity,
-                                        Size=readyToDecorateRequest.Size,
-                                        DecoratedBy="Srinivasa",
-                                        DecoratedOn="24th April,2019"};
+                // //Step 2: Write to readytobake topic
+                // DecoratedOrder bakedOrder = new DecoratedOrder(){
+                //                         Id=readyToDecorateRequest.Id,
+                //                         Flavour=readyToDecorateRequest.Flavour,
+                //                         Quantity=readyToDecorateRequest.Quantity,
+                //                         Size=readyToDecorateRequest.Size,
+                //                         DecoratedBy="Srinivasa",
+                //                         DecoratedOn="24th April,2019"};
 
-                string serializedOrder = JsonConvert.SerializeObject(bakedOrder);
-                var producerHelper = new ProducerWrapper(_producerConfig,"readytobox");
-                await producerHelper.writeMessage(serializedOrder);
-                Console.WriteLine($"Info: Decorate process finished the order, request moved to Package process");
+                // string serializedOrder = JsonConvert.SerializeObject(bakedOrder);
+                // var producerHelper = new ProducerWrapper(_producerConfig,"readytobox");
+                // await producerHelper.writeMessage(serializedOrder);
+                // Console.WriteLine($"Info: Decorate process finished the order, request moved to Package process");
             }
         }
     }
