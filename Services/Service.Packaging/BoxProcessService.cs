@@ -41,29 +41,11 @@ namespace Api.BackgroundServices
                 //Deserilaize 
                 DecoratedOrder readyToBoxRequest = JsonConvert.DeserializeObject<DecoratedOrder>(message);
 
-                //TODO:: Process Order
-                Console.WriteLine($"Info: boxing/packaging the order for {readyToBoxRequest.Id}");
+                Console.WriteLine($"Info: Recieved order to boxing/packaging. Id# {readyToBoxRequest.Id}");
 
-                //Step 1: If there is a new message to readytobox topic, inform the client.
-                 await _orderMonitorHub.Clients.All.InformNewOrderToPackage(readyToBoxRequest);
-
-                // //TODO: Assume you are packaging the decorated cupcakes here
-                // await Task.Delay(5000);
-
-                // //Step 2: Write to readytobake topic
-                // BoxedOrder boxedOrder = new BoxedOrder(){
-                //                         Id=readyToBoxRequest.Id,
-                //                         Flavour=readyToBoxRequest.Flavour,
-                //                         Quantity=readyToBoxRequest.Quantity,
-                //                         Size=readyToBoxRequest.Size,
-                //                         PackagedBy="Srinivasa",
-                //                         PackagedOn="24th April,2019"};
-
-                // string serializedOrder = JsonConvert.SerializeObject(boxedOrder);
-                // var producerHelper = new ProducerWrapper(_producerConfig,"readytoship");
-                // await producerHelper.writeMessage(serializedOrder);
-                // Console.WriteLine($"Info: Packaging process finished the order, request moved to readytoship");
-                // Console.Write($"------Completed Order -----------");
+                //Step 1: If there is a new message in KAFKA "Orders" topic, inform the client.
+                Console.WriteLine($"Informing UI connected clients about the newly recieved order. Id# {readyToBoxRequest.Id}");
+                await _orderMonitorHub.Clients.All.InformNewOrderToPackage(readyToBoxRequest);
             }
         }
     }

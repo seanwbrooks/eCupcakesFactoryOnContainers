@@ -15,4 +15,8 @@
     <PackageReference Include="confluent.kafka" Version="1.0-beta2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common.Utils\Common.Utils.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -41,22 +41,11 @@ namespace Api.BackgroundServices
                 //Deserilaize 
                 OrderRequest orderRequest = JsonConvert.DeserializeObject<OrderRequest>(message);
 
-                //TODO:: Process Order
-                Console.WriteLine($"Info: Mixing for - order {orderRequest.Id}");
+                Console.WriteLine($"Info: Recieved order to mix. Id# {orderRequest.Id}");
 
                 //Step 1: If there is a new message in KAFKA "Orders" topic, inform the client.
+                Console.WriteLine($"Informing UI connected clients about the newly recieved order. Id# {orderRequest.Id}");
                  await _orderMonitorHub.Clients.All.InformNewOrderToMix(orderRequest);
-
-                // //TODO: Assume you are mixing the required stuff here
-                // await Task.Delay(5000);
-
-                // //Step 2: Write to readytobake topic
-                // MixedOrder mixedOrder = new MixedOrder(){Id=orderRequest.Id,Flavour=orderRequest.Flavour,Quantity=orderRequest.Quantity,Size=orderRequest.Size,MixedBy="Srinivasa",MixedOn="24th April,2019"};
-
-                // string serializedOrder = JsonConvert.SerializeObject(mixedOrder);
-                // var producerHelper = new ProducerWrapper(_producerConfig,"readytobake");
-                // await producerHelper.writeMessage(serializedOrder);
-                // Console.WriteLine($"Info: Mixer processed the order, request moved to bake process");
 
             }
         }
