@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Api.BackgroundServices;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -28,9 +29,13 @@ namespace Api
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
+            services.AddSignalR();
+
+            services.AddHostedService<MixProcessService>();
+
             services.AddCors(c =>
                 {
-                    c.AddPolicy("AllowOrigin", options => options.WithOrigins("http://localhost:3000").AllowAnyMethod().AllowAnyHeader().AllowCredentials());
+                    c.AddPolicy("AllowOrigin", options => options.WithOrigins("http://localhost:3000","http://localhost:3001").AllowAnyMethod().AllowAnyHeader().AllowCredentials());
                 });
             
             var producerConfig = new ProducerConfig();
@@ -56,6 +61,10 @@ namespace Api
             app.UseCors("AllowOrigin");
             //app.UseHttpsRedirection();
             app.UseMvc();
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<OrderMonitorHub>("/ordermonitorhub");
+            });
         }
     }
 }
