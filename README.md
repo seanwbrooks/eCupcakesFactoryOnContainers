@@ -108,13 +108,72 @@ https://blog.usejournal.com/why-are-you-still-doing-batch-processing-etl-is-dead
         npm start
         
 
-4. Verify if new messages were written to topics using kafkacat utility:
+6. Verify if new messages were written to topics using kafkacat utility:
 
        kafkacat -b localhost:9092 -t orderrequests -C
        kafkacat -b localhost:9092 -t readytobake -C
        kafkacat -b localhost:9092 -t readytodecorate -C
        kafkacat -b localhost:9092 -t readytobox -C
        kafkacat -b localhost:9092 -t readytoship -C
+7. How to verify individual API calls?
+
+        I. Submitting a new order:
+        
+        Curl -i -H "Content-Type: application/json" -X POST -d '{"Flavour":"Cookies","Quantity":11}' http://localhost:5000/api/v1/order
+
+        Expected Response:
+        {
+                "correlationId": "834fea52-c476-4469-8c7d-8efd15d38d9e",
+                "acknowledgment": "Recieved your order!! Estimated time to process is 10mins",
+                "createdOn": "05/04/2019 19:24",
+                "order": {
+                        "id": 0,
+                        "flavour": "Cookies",
+                        "size": 0,
+                        "quantity": 11
+                }
+        }
+
+        II. Updating order as mixed:
+
+        Curl -i -H "Content-Type: application/json" -X POST -d '{"Flavour":"Cookies","Quantity":11,"MixedBy":"Tom","MixedOn":"05/04/2019 02:05PM"}' http://localhost:5000/api/v1/order/mix
+
+        Expected Response:
+
+        200 OK
+
+        III. Updating order as baked:
+
+        Curl -i -H "Content-Type: application/json" -X POST -d '{"Id":123,"Flavour":"Cookies","Quantity":11,"MixedBy":"Tom","MixedOn":"05/04/2019 02:05PM",
+        "BakedBy":"Harry","BakedOn":"05/04/2019 02:10PM"}' http://localhost:5000/api/v1/order/bake
+
+        Expected Response:
+
+        200 OK
+
+        IV. Updating order as decorated:
+
+        Curl -i -H "Content-Type: application/json" -X POST -d '{"Id":123,"Flavour":"Cookies","Quantity":11,"MixedBy":"Tom","MixedOn":"05/04/2019 02:05PM",
+        "BakedBy":"Harry","BakedOn":"05/04/2019 02:10PM",
+        "DecoratedBy":"James","DecoratedOn":"05/04/2019 02:15PM"}' http://localhost:5000/api/v1/order/decorate
+
+        Expected Response:
+
+        200 OK
+
+        V. Updating order as packaged:
+
+        Curl -i -H "Content-Type: application/json" -X POST -d '{"Id":123,"Flavour":"Cookies","Quantity":11,"MixedBy":"Tom","MixedOn":"05/04/2019 02:05PM",
+        "BakedBy":"Harry","BakedOn":"05/04/201902:10PM",
+        "DecoratedBy":"James","DecoratedOn":"05/04/2019 02:15PM",
+        "PackagedBy":"Bill",
+        "PackagedOn":"05/04/2019 02:20PM"}' http://localhost:5000/api/v1/order/box
+
+        Expected Response:
+
+        200 OK
+
+
 
 ### Troubleshooting tips:
 - If your producer/consumer is not responding at all, then verify your keytab file with below steps
