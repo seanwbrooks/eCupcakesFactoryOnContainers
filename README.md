@@ -119,7 +119,7 @@ https://blog.usejournal.com/why-are-you-still-doing-batch-processing-etl-is-dead
 
         I. Submitting a new order:
         
-        Curl -i -H "Content-Type: application/json" -X POST -d '{"Flavour":"Cookies","Quantity":11}' http://localhost:5000/api/v1/order
+        Curl -i -H "Content-Type: application/json" -X POST -d '{"Order":{"Flavour":"Cookies","Quantity":11}}' http://localhost:5000/api/v1/order
 
         Expected Response:
         {
@@ -136,7 +136,7 @@ https://blog.usejournal.com/why-are-you-still-doing-batch-processing-etl-is-dead
 
         II. Updating order as mixed:
 
-        Curl -i -H "Content-Type: application/json" -X POST -d '{"Flavour":"Cookies","Quantity":11,"MixedBy":"Tom","MixedOn":"05/04/2019 02:05PM"}' http://localhost:5000/api/v1/order/mix
+        Curl -i -H "Content-Type: application/json" -X POST -d '{"Order":{"Flavour":"Cookies","Quantity":11,"MixedBy":"Tom","MixedOn":"05/04/2019 02:05PM"}}' http://localhost:5000/api/v1/order/mix
 
         Expected Response:
 
@@ -144,8 +144,8 @@ https://blog.usejournal.com/why-are-you-still-doing-batch-processing-etl-is-dead
 
         III. Updating order as baked:
 
-        Curl -i -H "Content-Type: application/json" -X POST -d '{"Id":123,"Flavour":"Cookies","Quantity":11,"MixedBy":"Tom","MixedOn":"05/04/2019 02:05PM",
-        "BakedBy":"Harry","BakedOn":"05/04/2019 02:10PM"}' http://localhost:5000/api/v1/order/bake
+        Curl -i -H "Content-Type: application/json" -X POST -d '{"Order":{"Id":123,"Flavour":"Cookies","Quantity":11,"MixedBy":"Tom","MixedOn":"05/04/2019 02:05PM",
+        "BakedBy":"Harry","BakedOn":"05/04/2019 02:10PM"}}' http://localhost:5000/api/v1/order/bake
 
         Expected Response:
 
@@ -153,9 +153,9 @@ https://blog.usejournal.com/why-are-you-still-doing-batch-processing-etl-is-dead
 
         IV. Updating order as decorated:
 
-        Curl -i -H "Content-Type: application/json" -X POST -d '{"Id":123,"Flavour":"Cookies","Quantity":11,"MixedBy":"Tom","MixedOn":"05/04/2019 02:05PM",
+        Curl -i -H "Content-Type: application/json" -X POST -d '{"Order":{"Id":123,"Flavour":"Cookies","Quantity":11,"MixedBy":"Tom","MixedOn":"05/04/2019 02:05PM",
         "BakedBy":"Harry","BakedOn":"05/04/2019 02:10PM",
-        "DecoratedBy":"James","DecoratedOn":"05/04/2019 02:15PM"}' http://localhost:5000/api/v1/order/decorate
+        "DecoratedBy":"James","DecoratedOn":"05/04/2019 02:15PM"}}' http://localhost:5000/api/v1/order/decorate
 
         Expected Response:
 
@@ -163,11 +163,11 @@ https://blog.usejournal.com/why-are-you-still-doing-batch-processing-etl-is-dead
 
         V. Updating order as packaged:
 
-        Curl -i -H "Content-Type: application/json" -X POST -d '{"Id":123,"Flavour":"Cookies","Quantity":11,"MixedBy":"Tom","MixedOn":"05/04/2019 02:05PM",
+        Curl -i -H "Content-Type: application/json" -X POST -d '{"Order":{"Id":123,"Flavour":"Cookies","Quantity":11,"MixedBy":"Tom","MixedOn":"05/04/2019 02:05PM",
         "BakedBy":"Harry","BakedOn":"05/04/201902:10PM",
         "DecoratedBy":"James","DecoratedOn":"05/04/2019 02:15PM",
         "PackagedBy":"Bill",
-        "PackagedOn":"05/04/2019 02:20PM"}' http://localhost:5000/api/v1/order/box
+        "PackagedOn":"05/04/2019 02:20PM"}}' http://localhost:5000/api/v1/order/box
 
         Expected Response:
 

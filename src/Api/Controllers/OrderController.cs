@@ -9,7 +9,8 @@ using Api.KafkaUtil;
 using Newtonsoft.Json;
 using Confluent.Kafka;
 using Common.Utils;
-
+using Api.Commands;
+using MediatR;
 namespace Api.Controllers
 {
     [Route("api/v1/[controller]")]
@@ -18,20 +19,23 @@ namespace Api.Controllers
     {
 
         private readonly ProducerConfig _config;
+        private readonly IMediator _mediator;
 
-        public OrderController(ProducerConfig config)
+        public OrderController(ProducerConfig config, IMediator mediator)
         {
+            this._mediator = mediator;
             this._config = config ?? throw new ArgumentNullException(nameof(config));
         }
 
         [HttpPost]
         [ProducesResponseType(typeof(OrderAcknowledgment), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateOrderAsync([FromBody] OrderRequest orderRequest)
+        public async Task<IActionResult> CreateOrderAsync([FromBody]PlaceNewOrderCommand newOrderCommand )
         {
             if(!ModelState.IsValid){
                 BadRequest();
             }
+            OrderRequest orderRequest = newOrderCommand.Order;
 
             Console.WriteLine("===================================");
             Console.WriteLine("POST=> Recieved a new order request");
@@ -42,17 +46,10 @@ namespace Api.Controllers
             //Generate OrderId number
             orderRequest.Id = SequenceNumberGenerator.Next;
 
-            //Serialize 
-            string serializedOrder = JsonConvert.SerializeObject(orderRequest);
-            var producer = new ProducerWrapper(this._config,"orderrequests");
-            await producer.writeMessage(serializedOrder);
+            //Send create new order command
+            var acknowledgementInfo = await _mediator.Send(newOrderCommand);
+            
 
-            var acknowledgementInfo = new OrderAcknowledgment(){
-                                            CorrelationId=Guid.NewGuid(),
-                                            Acknowledgment="Recieved your order!! Estimated time to process is 10mins",
-                                            CreatedOn=DateTime.Now.ToString("MM/dd/yyyy HH:mm"),
-                                            Order = orderRequest
-                                        };
             return CreatedAtAction(nameof(GetById),new { id = orderRequest.Id }, acknowledgementInfo );
         }
 
@@ -60,12 +57,12 @@ namespace Api.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UpdateOrderStageAsMixedAsync([FromBody]MixedOrder mixedOrder)
+        public async Task<IActionResult> UpdateOrderStageAsMixedAsync([FromBody]MarkOrderStatusAsMixedCommand cmd)
         {
             if(!ModelState.IsValid){
                 BadRequest();
             }
-
+            var mixedOrder = cmd.Order;
             Console.WriteLine("===============MIX====================");
             Console.WriteLine($"POST => updating order#{mixedOrder.Id} as  mixed, moving this to bake queue");
             Console.WriteLine("----");
@@ -73,10 +70,8 @@ namespace Api.Controllers
             Console.WriteLine($"MixedBy:{mixedOrder.MixedBy}, MixedOn:{mixedOrder.MixedOn}");
             Console.WriteLine("===================================");
             
-            //Serialize 
-            string serializedOrder = JsonConvert.SerializeObject(mixedOrder);
-            var producer = new ProducerWrapper(this._config,"readytobake");
-            await producer.writeMessage(serializedOrder);
+            //Send a command to update the order status as mixed
+            var isAccepted = await _mediator.Send(cmd);
 
             //"your order has been updated as mixed , moved it to bake queue."
             return Ok();
@@ -86,11 +81,13 @@ namespace Api.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UpdateOrderStageAsBakedAsync([FromBody]BakedOrder bakedOrder)
+        public async Task<IActionResult> UpdateOrderStageAsBakedAsync([FromBody]MarkOrderStatusAsBakedCommand cmd)
         {
             if(!ModelState.IsValid){
                 BadRequest();
             }
+
+            var bakedOrder = cmd.Order;
 
             Console.WriteLine("===============Bake====================");
             Console.WriteLine($"POST => updating order#{bakedOrder.Id} as baked, moving this to decorate queue");
@@ -100,10 +97,8 @@ namespace Api.Controllers
             Console.WriteLine("===================================");
             
 
-            //Serialize 
-            string serializedOrder = JsonConvert.SerializeObject(bakedOrder);
-            var producer = new ProducerWrapper(this._config,"readytodecorate");
-            await producer.writeMessage(serializedOrder);
+            //Send a command to update the order status as baked
+            var isAccepted = await _mediator.Send(cmd);
 
             //"your order has been updated as baked , moved it to decorate queue."
             return Ok();
@@ -113,11 +108,12 @@ namespace Api.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UpdateOrderStageAsDecoratedAsync([FromBody]DecoratedOrder decoratedOrder)
+        public async Task<IActionResult> UpdateOrderStageAsDecoratedAsync([FromBody]MarkOrderStatusAsDecoratedCommand cmd)
         {
             if(!ModelState.IsValid){
                 BadRequest();
             }
+            var decoratedOrder = cmd.Order;
 
             Console.WriteLine("===============Decorator====================");
             Console.WriteLine($"POST => updating order#{decoratedOrder.Id} as decorated, moving this to readytobox queue");
@@ -127,11 +123,8 @@ namespace Api.Controllers
             Console.WriteLine("===================================");
             
 
-            //Serialize 
-            string serializedOrder = JsonConvert.SerializeObject(decoratedOrder);
-            var producer = new ProducerWrapper(this._config,"readytobox");
-            await producer.writeMessage(serializedOrder);
-
+           //Send a command to update the order status as decorated
+            var isAccepted = await _mediator.Send(cmd);
 
             //"your order has been updated as decorated , moved it to box queue."
             return Ok();
@@ -141,11 +134,13 @@ namespace Api.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UpdateOrderStageAsPackagedAsync([FromBody]BoxedOrder boxedOrder)
+        public async Task<IActionResult> UpdateOrderStageAsPackagedAsync([FromBody]MarkOrderStatusAsPackagedCommand cmd)
         {
             if(!ModelState.IsValid){
                 BadRequest();
             }
+
+            var boxedOrder = cmd.Order;
 
             Console.WriteLine("===============Packaging====================");
             Console.WriteLine($"POST => updating order#{boxedOrder.Id} as packaged , moving this to readytoship queue");
@@ -155,11 +150,8 @@ namespace Api.Controllers
             Console.WriteLine("===================================");
             
 
-            //Serialize 
-            string serializedOrder = JsonConvert.SerializeObject(boxedOrder);
-            var producer = new ProducerWrapper(this._config,"readytoship");
-            await producer.writeMessage(serializedOrder);
-
+            //Send a command to update the order status as boxed
+            var isAccepted = await _mediator.Send(cmd);
 
             //"your order has been updated as packaged , moved it to readytoship queue."
             return Ok();

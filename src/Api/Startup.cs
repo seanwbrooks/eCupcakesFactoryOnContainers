@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using SignalRDemo.Hubs;
 using Confluent.Kafka;
+using MediatR;
 namespace Api
 {
     public class Startup
@@ -40,6 +41,10 @@ namespace Api
 
             services.AddSingleton<ProducerConfig>(producerConfig);
             services.AddSingleton<ConsumerConfig>(consumerConfig);
+
+            //services.AddScoped<IMediator, Mediator>();
+            services.AddMediatR(typeof(Startup));
+ 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
