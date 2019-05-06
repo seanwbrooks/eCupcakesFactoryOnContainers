@@ -37,12 +37,15 @@ namespace SignalRDemo.Hubs{
         }
         private SignalRClient extractInformation(HubCallerContext context){
             //TODO
+            var httpContext = Context.GetHttpContext();
+            string consumerGroupName = httpContext.Request.Query["consumergroup"];
+            string topicName = httpContext.Request.Query["topic"];
             ConsumerConfig config = new ConsumerConfig(){
-                GroupId = "G1",
+                GroupId = consumerGroupName,
                 BootstrapServers="localhost:9092",
                 ClientId=context.ConnectionId
             };
-            return new SignalRClient(){ ConsumerConfig = config, Url="http://localhost:3000/",Topic="orderrequests",ConsumerGroup="G1",ConnectionId=context.ConnectionId};
+            return new SignalRClient(){ ConsumerConfig = config,Topic=topicName,ConsumerGroup=consumerGroupName,ConnectionId=context.ConnectionId};
         }
 
         public Dictionary<string,Consumer<string,string>> AllActiveConnections{

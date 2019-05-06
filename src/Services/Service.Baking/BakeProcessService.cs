@@ -8,6 +8,7 @@ using SignalRDemo.Hubs;
 using Newtonsoft.Json;
 using Confluent.Kafka;
 using Api.KafkaUtil;
+using System.Collections.Generic;
 
 namespace Api.BackgroundServices
 {
@@ -34,19 +35,36 @@ namespace Api.BackgroundServices
 
             while (!stoppingToken.IsCancellationRequested)
             {
+                var allConnections = new Dictionary<string,Consumer<string,string>>(SignalRKafkaProxy.AllConsumers);
+                Console.WriteLine("Connections count:"+allConnections.Count);
+                foreach (var c in allConnections)
+                {
+                    Console.WriteLine("ConnectionId: "+c.Key);
+                }
+                
+                if(allConnections!=null){
+                    foreach(var connection in allConnections){
+                        
+                        //Read a message
+                        string connectionId = connection.Key;
+                        Console.WriteLine($"connection: {connectionId}, consumer:{connection.Value}");
+                        Consumer<string,string> consumerConnection = connection.Value;
 
-                var consumerHelper = new ConsumerWrapper(_consumerConfig, "readytobake");
-                string message = consumerHelper.readMessage();
+                        var consumerResult = consumerConnection.Consume(new TimeSpan(0,0,15));
 
-                //Deserilaize 
-                MixedOrder readyToBakeRequest = JsonConvert.DeserializeObject<MixedOrder>(message);
+                        if(consumerResult!=null){
 
-                Console.WriteLine($"Info: Recieved order to bake. Id# {readyToBakeRequest.Id}");
+                            //Deserilaize 
+                            MixedOrder orderRequest = JsonConvert.DeserializeObject<MixedOrder>(consumerResult.Value);
+                            Console.WriteLine($"Info: Recieved order to mix. Id# {orderRequest.Id}");
 
-                //Step 1: If there is a new message in KAFKA "Orders" topic, inform the client.
-                Console.WriteLine($"Informing UI connected clients about the newly recieved order. Id# {readyToBakeRequest.Id}");
-                 await _orderMonitorHub.Clients.All.InformNewOrderToBake(readyToBakeRequest);
-
+                            //Step 1: If there is a new message in KAFKA "Orders" topic, inform the client.
+                            Console.WriteLine($"Informing UI connected clients about the newly recieved order. Id# {orderRequest.Id}");
+             
+                            await _orderMonitorHub.Clients.Client(connectionId).InformNewOrderToBake(orderRequest);
+                        }
+                    }
+                }
             }
         }
     }

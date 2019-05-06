@@ -6,12 +6,15 @@ export const submitUserOrderRequest = ({ Id, Flavour,Size, Quantity }) => {
     'Content-Type': 'application/json'
 }  
   const request = axios.post(
-      "http://localhost:5000/api/order",
+      "http://localhost:5000/api/v1/order",
       {
-        Id,
-        Flavour,
-        Size,
-        Quantity
+        "Order":
+        {
+          Id,
+          Flavour,
+          Size,
+          Quantity
+        }
       },
       {headers: headers}
     ).catch(err =>{console.log("Error occured during POST request:",err);throw err;});
@@ -27,8 +30,8 @@ export const submitUserOrderRequest = ({ Id, Flavour,Size, Quantity }) => {
       'Content-Type': 'application/json'
     }  
     const request = axios.post(
-        "http://localhost:5000/api/bake",
-        payload,
+        "http://localhost:5000/api/v1/order/bake",
+        {"Order":payload},
         {headers: headers}
       ).catch(err =>{console.log("Error occured while submitting baked order:",err);throw err;});
     
@@ -43,8 +46,8 @@ export const submitUserOrderRequest = ({ Id, Flavour,Size, Quantity }) => {
         'Content-Type': 'application/json'
       }  
       const request = axios.post(
-          "http://localhost:5000/api/mix",
-          payload,
+          "http://localhost:5000/api/v1/order/mix",
+          {"Order":payload},
           {headers: headers}
         ).catch(err =>{console.log("Error occured while submitting mixed order:",err);throw err;});
       
@@ -58,8 +61,8 @@ export const submitUserOrderRequest = ({ Id, Flavour,Size, Quantity }) => {
           'Content-Type': 'application/json'
         }  
         const request = axios.post(
-            "http://localhost:5000/api/decorate",
-            payload,
+            "http://localhost:5000/api/v1/order/decorate",
+            {"Order":payload},
             {headers: headers}
           ).catch(err =>{console.log("Error occured while submitting decorated order:",err);throw err;});
         
@@ -73,8 +76,8 @@ export const submitUserOrderRequest = ({ Id, Flavour,Size, Quantity }) => {
             'Content-Type': 'application/json'
           }  
           const request = axios.post(
-              "http://localhost:5000/api/box",
-              payload,
+              "http://localhost:5000/api/v1/order/box",
+              {"Order":payload},
               {headers: headers}
             ).catch(err =>{console.log("Error occured while submitting boxed order:",err);throw err;});
           
