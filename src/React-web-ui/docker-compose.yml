@@ -1,0 +1,9 @@
+version: '3'
+services:
+  web:
+    build: .
+    volumes:
+      - .:/Users/anansan/Tribalscale/KafkaEventStreamingSimulation/cupcakes.ui
+      - /Users/anansan/Tribalscale/KafkaEventStreamingSimulation/cupcakes.ui/node_modules
+    ports:
+      - 3000:3000
