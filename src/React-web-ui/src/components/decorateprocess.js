@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import * as SignalR from "@aspnet/signalr";
 import Card from '@material-ui/core/Card';
@@ -106,7 +105,7 @@ class OrdersToDecorate extends Component {
 
     componentDidMount = () => {
         const hubConnection = new SignalR.HubConnectionBuilder()
-            .withUrl("http://localhost:5003/ordermonitorhub")
+            .withUrl("http://localhost:5003/ordermonitorhub?consumergroup=bostonbeach&topic=readytodecorate")
             .configureLogging(SignalR.LogLevel.Information)
             .build();
         this.setState({ hubConnection }, () => {

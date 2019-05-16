@@ -35,7 +35,7 @@ namespace Api.BackgroundServices
 
             while (!stoppingToken.IsCancellationRequested)
             {
-                var allConnections = new Dictionary<string,Consumer<string,string>>(SignalRKafkaProxy.AllConsumers);
+                var allConnections = new Dictionary<string,IConsumer<string,string>>(SignalRKafkaProxy.AllConsumers);
                 Console.WriteLine("Connections count:"+allConnections.Count);
                 foreach (var c in allConnections)
                 {
@@ -48,7 +48,7 @@ namespace Api.BackgroundServices
                         //Read a message
                         string connectionId = connection.Key;
                         Console.WriteLine($"connection: {connectionId}, consumer:{connection.Value}");
-                        Consumer<string,string> consumerConnection = connection.Value;
+                        IConsumer<string,string> consumerConnection = connection.Value;
 
                         var consumerResult = consumerConnection.Consume(new TimeSpan(0,0,15));
 

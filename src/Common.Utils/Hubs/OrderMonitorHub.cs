@@ -18,7 +18,7 @@ namespace SignalRDemo.Hubs{
                 SignalRKafkaProxy.AddClient(client);
 
                 //Create a connection object 
-                Consumer<string,string> consumerObj = new Consumer<string,string>(client.ConsumerConfig);
+                IConsumer<string,string> consumerObj = new ConsumerBuilder<string,string>(client.ConsumerConfig).Build();
                 consumerObj.Subscribe(client.Topic);
                 Console.WriteLine($"Adding {consumerObj}");
                 SignalRKafkaProxy.AddConsumer(client.ConnectionId,consumerObj);
@@ -48,7 +48,7 @@ namespace SignalRDemo.Hubs{
             return new SignalRClient(){ ConsumerConfig = config,Topic=topicName,ConsumerGroup=consumerGroupName,ConnectionId=context.ConnectionId};
         }
 
-        public Dictionary<string,Consumer<string,string>> AllActiveConnections{
+        public Dictionary<string,IConsumer<string,string>> AllActiveConnections{
             get{
                 return  SignalRKafkaProxy.AllConsumers;
             }
