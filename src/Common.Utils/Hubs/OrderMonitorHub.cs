@@ -40,10 +40,20 @@ namespace SignalRDemo.Hubs{
             var httpContext = Context.GetHttpContext();
             string consumerGroupName = httpContext.Request.Query["consumergroup"];
             string topicName = httpContext.Request.Query["topic"];
+            //string topicName = "orderrequests";
             ConsumerConfig config = new ConsumerConfig(){
                 GroupId = consumerGroupName,
-                BootstrapServers="broker:9092",
-                ClientId=context.ConnectionId
+                BootstrapServers="pkc-epgnk.us-central1.gcp.confluent.cloud:9092",
+                ClientId=context.ConnectionId,
+                BrokerVersionFallback = "0.10.0.0",
+                ApiVersionFallbackMs = 0,
+                SaslMechanism = SaslMechanism.Plain,
+                SecurityProtocol = SecurityProtocol.SaslSsl,
+                SslCaLocation = "/usr/local/etc/openssl/cert.pem", 
+                SaslUsername = "QI3PBURMOZULU3YG",
+                SaslPassword = "DkIXGUrGp8yQwl2dsIYBT1kyuyme/PMj5GSTHjpz/Uql357lY5T0lo+rDM7+cJm8",
+                //GroupId = Guid.NewGuid().ToString(),
+                AutoOffsetReset = AutoOffsetReset.Earliest
             };
             return new SignalRClient(){ ConsumerConfig = config,Topic=topicName,ConsumerGroup=consumerGroupName,ConnectionId=context.ConnectionId};
         }

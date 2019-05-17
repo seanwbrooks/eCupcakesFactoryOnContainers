@@ -195,7 +195,7 @@ class OrdersToDecorate extends Component {
             </CardContent>
             <CardActions>
                 <Typography component="button" variant="subtitile" style={{right:0}}>
-                    { this.state.messages.length==0 ? "No Orders" : <NewOrders/> }
+                    { this.state.messages.length===0 ? "No Orders" : <NewOrders/> }
                     </Typography>
             </CardActions>
         </Card>

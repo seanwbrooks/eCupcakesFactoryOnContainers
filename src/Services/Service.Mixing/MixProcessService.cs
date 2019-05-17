@@ -55,7 +55,7 @@ namespace Api.BackgroundServices
                         Console.WriteLine($"connection: {connectionId}, consumer:{connection.Value}");
                         IConsumer<string,string> consumerConnection = connection.Value;
 
-                        var consumerResult = consumerConnection.Consume(new TimeSpan(0,0,15));
+                        var consumerResult = consumerConnection.Consume(new TimeSpan(0,0,1));
 
                         if(consumerResult!=null){
 

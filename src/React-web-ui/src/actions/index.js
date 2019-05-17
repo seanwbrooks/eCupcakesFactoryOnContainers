@@ -31,7 +31,7 @@ export const submitUserOrderRequest = ({ Id, Flavour,Size, Quantity }) => {
     }  
     const request = axios.post(
         "http://localhost:5000/api/v1/order/bake",
-        payload,
+        {Order:payload},
         {headers: headers}
       ).catch(err =>{console.log("Error occured while submitting baked order:",err);throw err;});
     
@@ -61,7 +61,7 @@ export const submitUserOrderRequest = ({ Id, Flavour,Size, Quantity }) => {
       }  
       const request = axios.post(
           "http://localhost:5000/api/v1/order/mix",
-          payload,
+          {Order:payload},
           {headers: headers}
         ).catch(err =>{console.log("Error occured while submitting mixed order:",err);throw err;});
       
@@ -76,7 +76,7 @@ export const submitUserOrderRequest = ({ Id, Flavour,Size, Quantity }) => {
         }  
         const request = axios.post(
             "http://localhost:5000/api/v1/order/decorate",
-            payload,
+            {Order:payload},
             {headers: headers}
           ).catch(err =>{console.log("Error occured while submitting decorated order:",err);throw err;});
         
@@ -91,7 +91,7 @@ export const submitUserOrderRequest = ({ Id, Flavour,Size, Quantity }) => {
           }  
           const request = axios.post(
               "http://localhost:5000/api/v1/order/box",
-              payload,
+              {Order:payload},
               {headers: headers}
             ).catch(err =>{console.log("Error occured while submitting boxed order:",err);throw err;});
           
