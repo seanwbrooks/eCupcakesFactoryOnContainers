@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: ecupfactory-service
+spec:
+  selector:
+    app: ecupfactory-api-deployment
+  type: NodePort
+  ports:
+  - protocol: TCP
+    nodePort: 32132
+    port: 80
+    targetPort: 80

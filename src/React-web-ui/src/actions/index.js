@@ -6,7 +6,7 @@ export const submitUserOrderRequest = ({ Id, Flavour,Size, Quantity }) => {
     'Content-Type': 'application/json'
 }  
   const request = axios.post(
-      "http://localhost:5000/api/v1/order",
+      "http://35.227.87.230/api/v1/order/",
       {
         Order:
               {
