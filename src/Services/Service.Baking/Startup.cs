@@ -35,7 +35,7 @@ namespace Api
 
             services.AddCors(c =>
                 {
-                    c.AddPolicy("AllowOrigin", options => options.WithOrigins("http://localhost:3000","http://35.237.10.205:3000").AllowAnyMethod().AllowAnyHeader().AllowCredentials());
+                    c.AddPolicy("AllowOrigin", options => options.WithOrigins("http://localhost:3000","http://35.237.10.205:3000","http://35.237.117.93:3000").AllowAnyMethod().AllowAnyHeader().AllowCredentials());
                 });
             
             var producerConfig = new ProducerConfig();
