@@ -105,7 +105,7 @@ class OrdersToDecorate extends Component {
 
     componentDidMount = () => {
         const hubConnection = new SignalR.HubConnectionBuilder()
-            .withUrl("http://localhost:5003/ordermonitorhub?consumergroup=bostonbeach&topic=readytodecorate")
+            .withUrl("http://34.73.27.113:5003/ordermonitorhub?consumergroup=bostonbeach&topic=readytodecorate")
             .configureLogging(SignalR.LogLevel.Information)
             .build();
         this.setState({ hubConnection }, () => {

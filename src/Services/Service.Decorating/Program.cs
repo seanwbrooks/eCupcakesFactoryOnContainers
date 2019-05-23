@@ -19,6 +19,11 @@ namespace Api
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>().UseUrls("http://0.0.0.0:5003");
+            .ConfigureLogging(logging =>
+            {
+                logging.AddFilter("Microsoft.AspNetCore.SignalR", LogLevel.Debug);
+                logging.AddFilter("Microsoft.AspNetCore.Http.Connections", LogLevel.Debug);
+            })
+            .UseStartup<Startup>().UseUrls("http://0.0.0.0:5003");
     }
 }
